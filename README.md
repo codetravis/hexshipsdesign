@@ -3,11 +3,19 @@
 ## Contents
 1. [Summary](#Summary)
 2. [Units](#Units)
-- [Silhouette](#silhouette)
-3. [Weapon Hardpoints](#weapon-hardpoints)
-4. [Captains](#captains)
-5. [Campaign Management](#campaign-management)
-6. [Weapons and Attacks](#weapons-and-attacks)
+    - [Silhouette](#silhouette)
+    - [Shields](#shields)
+    - [Unit Energy](#unit-energy)
+    - [Weapon Hardpoints](#weapon-hardpoints)
+3. [Captains](#captains)
+    - [Command Levels](#command-levels)
+    - [Gunnery Levels](#gunnery-levels)
+    - [Engineering Levels](#engineering-levels)
+4. [Campaign Management](#campaign-management)
+5. [Weapons and Attacks](#weapons-and-attacks)
+    - [Weapon Accuracy](#weapon-accuracy)
+    - [Damage Order](#damage-order)
+    - [Critical Damage](#critical-damage)
 
 
 ## Summary
@@ -18,8 +26,11 @@ It represents spaceship combat in a fictional universe.
 
 Its core mechanics are:
 - ship movement
+- ship facing
+- weapon facing
 - energy management 
 - managing damage across the different sides of the ships
+- managing damage across shields, armor, and hull
 - multi battle campaigns with a persistent fleet
 - managing fleet in between battles
 
@@ -64,7 +75,31 @@ Some units are smaller from the front and larger from the sides.
 Other units are larger from the front and smaller from the sides.
 Finally there are some units that have the same silhouette from any direction.
 
-## Weapon Hardpoints
+### Shields
+The shield charge action is performed during the movement and action phase
+Shields cost 2 energy to restore 1 shield point
+A shield may not be increased higher than its max value
+Shield charge action may not be performed more times than the units Shield generator value in a single turn
+
+### Unit Energy
+Units use energy to charge shields, fire weapons and use special abilities
+
+When a target is selected during the attack phase
+the game will automatically try to enable any weapon that can reach the target
+It will go through the weapons sequentially in order of highest power cost to lowest power cost
+If the remaining energy exists to fire a weapon it will be auto enabled
+Game will keep track of how many weapons have been enabled so far and how much total energy is available
+Otherwise it will be skipped and the next weapon will be attempted
+
+Players can manually disable weapons to avoid using the energy
+Players can manually enable weapons if enough energy is available
+
+Units replenish their energy based on their Energy Generation value at the start of each turn
+Units may not have more energy than their Max Energy value
+
+Some special abilities cost energy such as Afterburners
+
+### Weapon Hardpoints
 Ships weapons are located in hard points
 
 A hard point represents a turret or fixed weapon mount
@@ -113,11 +148,11 @@ The game is played in a campaign usually consisting of several battles.
 
 The Player's fleet that may be managed in between battles.
 
-Captains can level up and gain abilities
-
-Units can be repaired
-
-Units can be selected for the next battle
+In Between battles a player can:
+- Assign skill points of Captains that have leveled up to the 3 ability scores
+- Place damaged ships in "Repair dock" to be repaired during the next battle
+- Select which units will participate in the upcoming battle
+- Start the next battle with the selected units (may not start the battle with no units)
 
 ## Weapons and Attacks
 
@@ -178,3 +213,39 @@ Damage to the target is applied in the following order
 3. Target hull
 
 with the exception of torpedoes which bypass the shield
+
+### Critical Damage
+Attacks that hit the internal hull of a ship have a chance to do critical damage
+
+Any attack that hits on a 12 (two sixes)
+counts as a critical
+also torpedoes always cause a critical if they damage the hull
+
+Critical hits have different effects depending on which side of the ship was hit
+
+If a critical is rolled,  a follow up roll of 1 d6 determines what damage was done
+
+For the front of the ship:
+1.  no damage
+2. Forward Weapons:  one of the weapons that can fire with the forward arc is disabled
+3. Forward Weapons: "
+4. Forward thrusters: ship cannot reduce speed
+5. Sensors: +2 difficulty of all this ships attacks
+6. Bridge:  Captain skills are reduced to 1 for all skills to a minimum of 1
+
+For the side of the ship:
+1. no damage
+2. side weapon
+3. side weapon
+4. side thrusters: ship must roll a 7 or higher on 2d6 to successfully rotate for each maneuverability point spent
+5. Communications: captain can no longer use special abilities 
+6. Life support: All captain skills reduced by 1 to a min of 1 (cannot be reduced to 0)
+
+
+For the rear of the ship
+1. no damage
+2. rear weapon
+3. rear weapon
+4. Engines: max speed reduced by 1
+5. Engines: max speed reduced by 1
+6. Shield generator: all shields immediately drop and cannot be regenerated
