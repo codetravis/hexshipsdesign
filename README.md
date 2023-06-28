@@ -1,12 +1,27 @@
 # Hex Ships Game Design Notes
 
+## Contents
+1. [Summary](#Summary)
+2. [Units](#Units)
+- [Silhouette](#silhouette)
+3. [Weapon Hardpoints](#weapon-hardpoints)
+4. [Captains](#captains)
+5. [Campaign Management](#campaign-management)
+6. [Weapons and Attacks](#weapons-and-attacks)
+
+
 ## Summary
 
 Hex Ships is a turn based tactical combat game on a hex grid.
 
 It represents spaceship combat in a fictional universe.
 
-Its core mechanics are ship movement, energy management, and managing damage across the different sides of the ships.
+Its core mechanics are:
+- ship movement
+- energy management 
+- managing damage across the different sides of the ships
+- multi battle campaigns with a persistent fleet
+- managing fleet in between battles
 
 
 ## Units
@@ -49,6 +64,14 @@ Some units are smaller from the front and larger from the sides.
 Other units are larger from the front and smaller from the sides.
 Finally there are some units that have the same silhouette from any direction.
 
+## Weapon Hardpoints
+Ships weapons are located in hard points
+
+A hard point represents a turret or fixed weapon mount
+
+Fixed weapons can fire directly down a row or column out of a single hex face
+
+Turrets have a field of fire, ranging from 2-6 hex faces
 
 ## Captains
 
@@ -63,22 +86,95 @@ Each level up provides 1 point that can be used to rank up a skill
 Max level for a captain is 10
 
 ### Command Levels
-Level 2: + 1 Initiative
-Level 3: 1 X Reroll per Battle
-Level 4: + 1 Initiative
-Level 5: Second Reroll per Battle
-Level 6: + 1 Initiative to entire fleet when included in deployment
+- Level 2: + 1 Initiative
+- Level 3: 1 X Reroll per Battle
+- Level 4: + 1 Initiative
+- Level 5: Second Reroll per Battle
+- Level 6: + 1 Initiative to entire fleet when included in deployment
 
 ### Gunnery Levels
-Level 2: - 1 to hit difficulty on all attacks
-Level 3: First missed shot of a battle with a weapon that fires ammo does not use ammo
-Level 4: - 1 to hit difficulty on all attacks
-Level 5: Can attack multiple targets in the same turn
-Level 6: - 1 to hit difficulty on all attacks
+- Level 2: - 1 to hit difficulty on all attacks
+- Level 3: Reduce speed of target penalty by 1 to a min of zero
+- Level 4: - 1 to hit difficulty on all attacks
+- Level 5: Can attack multiple targets in the same turn
+- Level 6: - 1 to hit difficulty on all attacks
 
 ### Engineering Levels
-Level 2: + 1 energy recharge per turn
-Level 3: Can use the Afterburners ability 1 x per battle
-Level 4: + 1 energy recharge per turn
-Level 5: Can repair 1 Critical damage per game
-Level 6: + 1 energy recharge per turn
+- Level 2: + 1 energy recharge per turn
+- Level 3: Can use the Afterburners ability 1 x per battle (increase speed by engine rating +1, can exceed max speed by 1 for a turn)
+- Level 4: + 1 energy recharge per turn
+- Level 5: Can repair 1 Critical damage per battle
+- Level 6: + 1 energy recharge per turn
+
+
+## Campaign Management
+
+The game is played in a campaign usually consisting of several battles.
+
+The Player's fleet that may be managed in between battles.
+
+Captains can level up and gain abilities
+
+Units can be repaired
+
+Units can be selected for the next battle
+
+## Weapons and Attacks
+
+There are 7 types of capital ship weapons
+
+- Lasers: Basic energy beams that maintain high accuracy but the damage drops off over range
+- Heavy Lases: higher energy requirement than standard lasers but lower damage drop off over range
+- EMP Beams: Energy disrupting beams, high damage to shields, low to armor and hull but with an energy generation disruption affect. Range slightly limited.
+- Ballistic Cannons: High velocity projectile launchers.  Accuracy drops over range but damage stays consistent.  Uses Ammo.
+- Missiles:  Guided explosives.  At least one missile in a barrage always hits. attack roll is for number of missiles that hit.  Damage from a missile hit does not bleed through defensive layers.
+- Rockets: Unguided explosives. Accuracy drops significantly over range. Also does not bleed through layers but does more damage than missiles.
+- Torpedoes: Special explosive with a unique shield penetration ability.  Very difficult to hit with but high damage.  Ignores shields.  High risk, high reward weapon.  fixed firing angles
+
+
+Weapon damage is balanced so that the expected damage of any one weapon over a 10 round battle is very near to each other.
+Exceptions are torpedoes and heavy lasers which should have somewhat higher than expected damage due to low ammo for torpedoes and higher energy cost for heavy lasers
+EMP Beams are a special control weapon that is not balanced for damage.
+
+Total expected damage is:
+ (damage * accuracy * number of attacks)
+
+ Balance is based on energy weapons can fire 8 out of 10 turns in place of ammo.
+
+### Weapon Accuracy:
+
+Attacks are rolled on 2 d6 die.  (2 random numbers between 1 and 6)
+If the value on the 2 die are greater than or equal to the difficulty of the attack, the attack  hits.
+1 roll is used for all attacks for simplicity
+
+For example if you have torpedoes with a to hit difficulty of 11 and lasers with a to hit difficulty of a  7 and the attack roll comes up 8,  then the lasers will hit and the torpedoes will not.
+
+Weapons each have their own accuracy rating but the actual difficulty is affected by other factors.
+Captain Gunnery skill reduces the difficulty
+Unit Silhouette can increase or decrease the difficulty
+Unit Speed can increase or decrease the difficulty
+
+Difficulty to hit is generally determined as follows
+Base weapon hit difficulty - Captain Gunnery Skill bonus + Target Silhouette Penalty/Bonus + Target Speed Penalty/Bonus
+
+Further hit difficulty bonuses or penalties may be added to the design later
+such as Electronic Counter Measures which increases difficulty to hit in an aura around the ship
+Anti Missile Systems that remove missile hits
+
+### Damage Order
+
+Damage from weapons should be applied in the following order
+1. Laser weapons
+2. EMP Beam weapons
+3. ballistic weapons
+4. missile weapons (missiles and rockets)
+5. torpedo weapons
+
+Representing the speed at which the weapons reach their target
+
+Damage to the target is applied in the following order
+1. Target Shield on appropriate face
+2. Target armor on appropriate face
+3. Target hull
+
+with the exception of torpedoes which bypass the shield
