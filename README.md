@@ -16,6 +16,7 @@
     - [Weapon Accuracy](#weapon-accuracy)
     - [Damage Order](#damage-order)
     - [Critical Damage](#critical-damage)
+    - [Sample Weapon Table](#sample-weapon-table)
 
 
 ## Summary
@@ -106,7 +107,10 @@ A hard point represents a turret or fixed weapon mount
 
 Fixed weapons can fire directly down a row or column out of a single hex face
 
-Turrets have a field of fire, ranging from 2-6 hex faces
+Turrets have a field of fire, ranging from 2-6 hex faces (a single hex face is a fixed weapon)
+The weapon in a turret slot may fire at any target within its range inside of the field of fire.
+The field of fire is relative to the facing of the unit.
+The turret field of fire changes when the Unit rotates.
 
 ## Captains
 
@@ -175,6 +179,16 @@ Total expected damage is:
  (damage * accuracy * number of attacks)
 
  Balance is based on energy weapons can fire 8 out of 10 turns in place of ammo.
+
+### Weapon Range:
+Weapons all share the same range brackets
+- Short Range: 1-3 hexes
+- Medium Range: 4-6 hexes
+- Long Range: 7-9 hexes
+
+Weapons may not be able to fire in all range brackets.
+Some weapons difficulty to hit is affected by the range bracket.
+Some weapons damage amount is affected by the range bracket.
 
 ### Weapon Accuracy:
 
@@ -249,3 +263,19 @@ For the rear of the ship
 4. Engines: max speed reduced by 1
 5. Engines: max speed reduced by 1
 6. Shield generator: all shields immediately drop and cannot be regenerated
+
+### Sample Weapon Table
+These values are for initial creation only and will need to be tweaked through playtesting.
+They should be easy to configure and modify for future builds.
+
+| Weapon | Energy Cost | Ammo Count | Short Range Damage | Short Range Accuracy | Medium Range Damage | Medium Range Accuracy |Long Range Damage | Long Range Accuracy |
+| ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| Laser       | 3           | -           | 5           | 3+          | 4           | 3+          | 3           | 3+          |
+| EMP Beam    | 3           | -           | 3           | 3+          | 2           | 4+          | -           | -           |
+| Heavy Laser | 5           | -           | 7           | 4+          | 6           | 4+          | 5           | 4+          |
+| Cannon      | 2           | 8           | 8           | 3+          | 8           | 5+          | 8           | 7+          |
+| Missile-3   | 2           | 4           | 9           | -           | 9           | -           | 9           | -           |
+| Rocket-5    | 1           | 4           | 11          | 5+          | 11          | 7+          | 11          | 9+          |
+| Torpedo     | 1           | 2           | 25          | 7+          | -           | -           | -           | -           |
+
+
