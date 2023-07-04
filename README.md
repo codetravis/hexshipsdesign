@@ -3,16 +3,21 @@
 ## Contents
 1. [Summary](#Summary)
 2. [Units](#Units)
+    - [Movement](#movement)
     - [Silhouette](#silhouette)
     - [Shields](#shields)
     - [Unit Energy](#unit-energy)
     - [Weapon Hardpoints](#weapon-hardpoints)
+    - [Sample Unit](#sample-unit)
 3. [Captains](#captains)
     - [Command Levels](#command-levels)
     - [Gunnery Levels](#gunnery-levels)
     - [Engineering Levels](#engineering-levels)
 4. [Campaign Management](#campaign-management)
 5. [Weapons and Attacks](#weapons-and-attacks)
+    - [Missile Special Rules](#missile-special-rules)
+    - [Torpedo Special Rules](#torpedo-special-rules)
+    - [EMP Beam Special Rules](#emp-beam-special-rules)
     - [Weapon Accuracy](#weapon-accuracy)
     - [Damage Order](#damage-order)
     - [Critical Damage](#critical-damage)
@@ -54,13 +59,26 @@ Most units will have the following attributes:
 9. Current Speed: the number of spaces this unit must move this loop,  negative speed indicates moving in reverse
 10. Thrust Rating: positive and negative values indicate how much this unit can increase or decrease its speed in a single movement phase. 
 11. Maneuverability: how many hex face rotations a unit can make in a single movement phase 
-12. Energy Cells:  How much energy the unit currently has available for firing weapons, charging shields, and special abilities
+12. Current Energy:  How much energy the unit currently has available for firing weapons, charging shields, and special abilities
 13. Max Energy: The maximum number of energy this unit can have at once
 14. Energy regen: how much energy this unit gets back at the beginning of the play loop
-15. Energy Disruption: how much EMP damage this ship has taken.  If it gets to high, the ship becomes disabled.
+15. Energy Disruption: how much EMP damage this ship has taken.  If this value is higher than or equal to Energy Regen, the ship becomes disabled.
 16. Weapon Hardpoints: Slots that can hold turrets or weapons. They have a facing and allowed weapon types
 
+### Movement:
+Units must move a number of spaces equal to their current speed during the movement phase.
+If their speed is positive, they will move forward.
+If their speed is negative, they will move backward.
+The speed can be adjusted at the beginning of the movement phase equal to the units Thrust rating.
 
+A Unit may rotate during any part of its move.
+It may choose to rotate as many times as it has Maneuverability points.
+
+For example: A ship at speed 3 with maneuverability 2 could rotate a total of 2 times in any of the 4 hexes that complete its movement (0, 1, 2, 3).
+See example images folder for a sketch of possible end locations and facings from a move.
+
+Example of how to control movement:
+Button for "Advance"  2 buttons for rotation (right and left).  Speed / Thrust control.
 
 ### Silhouette:
 When an attack is made against a ship, it takes into account the silhouette the ship presents to it as how difficult it is to hit.
@@ -81,6 +99,9 @@ The shield charge action is performed during the movement and action phase
 Shields cost 2 energy to restore 1 shield point
 A shield may not be increased higher than its max value
 Shield charge action may not be performed more times than the units Shield generator value in a single turn
+If a Shield face is at 0,  it is considered collapsed.
+A collapsed shield may be restored but it takes 5 energy to rebuild the first point of the shield.
+After that it charges as normal.
 
 ### Unit Energy
 Units use energy to charge shields, fire weapons and use special abilities
@@ -112,6 +133,32 @@ The weapon in a turret slot may fire at any target within its range inside of th
 The field of fire is relative to the facing of the unit.
 The turret field of fire changes when the Unit rotates.
 
+Hard point locations can be limited to the type of weapons that can be installed there.
+- Omni hard points can hold any type of weapon
+- Energy hard points can hold lasers, emp beams, and heavy lasers
+- Missile hard points can hold missiles or rockets
+- Ballistic hard points can hold cannons
+- Torpedo hard points can hold torpedoes
+
+### Sample Unit
+Dagger Frigate
+1. Hull Structure (Current/Max): 5/5
+2. Base Initiative: 3
+3. Armor Faces (Current/Max): Front =>  10/10 | Right => 7/7 | Left => 7/7 | Rear => 3/3 
+4. Shield Faces (Current/Max): Front =>  5/5 | Right => 5/5 | Left => 5/5 | Rear => 5/5
+5. Shield generator: 2
+6. Size: 1
+7. Silhouette: F2B => Tiny | S2S => Tiny
+8. Max Speed: 7
+9. Current Speed: 0
+10. Thrust Rating: +3 / -2 
+11. Maneuverability: 4
+12. Current Energy:  0
+13. Max Energy: 8
+14. Energy regen: 5
+15. Energy Disruption: 0
+16. Weapon Hardpoints: Omni Turret (1-6) | Energy Fixed (1)
+
 ## Captains
 
 Each ship has a captain with 3 skills with ranks from 1-6
@@ -142,7 +189,7 @@ Max level for a captain is 10
 - Level 2: + 1 energy recharge per turn
 - Level 3: Can use the Afterburners ability 1 x per battle (increase speed by engine rating +1, can exceed max speed by 1 for a turn)
 - Level 4: + 1 energy recharge per turn
-- Level 5: Can repair 1 Critical damage per battle
+- Level 5: Can use the Shield Shift ability 1 x per battle (move shield points from one shield face to another)
 - Level 6: + 1 energy recharge per turn
 
 
@@ -171,14 +218,51 @@ There are 7 types of capital ship weapons
 - Torpedoes: Special explosive with a unique shield penetration ability.  Very difficult to hit with but high damage.  Ignores shields.  High risk, high reward weapon.  fixed firing angles
 
 
-Weapon damage is balanced so that the expected damage of any one weapon over a 10 round battle is very near to each other.
+Weapon damage is balanced so that the expected damage of any one weapon over a 12 round battle is very near to each other.
 Exceptions are torpedoes and heavy lasers which should have somewhat higher than expected damage due to low ammo for torpedoes and higher energy cost for heavy lasers
 EMP Beams are a special control weapon that is not balanced for damage.
 
 Total expected damage is:
  (damage * accuracy * number of attacks)
 
- Balance is based on energy weapons can fire 8 out of 10 turns in place of ammo.
+ Balance is based on energy weapons firing about 8 out of 10 turns and ammo based weapons firing all of their ammo.
+
+### Missile Special Rules:
+Missiles are guided weapons.
+At least 1 missile from a barrage will always hit the target.
+The number of missiles that hit is based on a second "Missile hit" roll on 1 x d6
+Missile weapons fire in clusters of 3.
+For a Missile-3:
+- A Missile Hit roll of 1-2 means 1 missile hits
+- A Missile Hit roll of 3-4 means 2 missiles hit
+- A Missile Hit roll of 5-6 means 3 missiles hit
+For a Missile-6:
+- A Missile Hit roll of 1 means 1 missile hits
+- A Missile Hit roll of 2 means 2 missiles hit
+- A Missile Hit roll of 3 means 3 missiles hit
+- A Missile Hit roll of 4 means 4 missiles hit
+- A Missile Hit roll of 5 means 5 missiles hit
+- A Missile Hit roll of 6 means 6 missiles hit
+
+Missile damage does not bleed through shield and armor layers like lasers and cannons do.
+But each missile damage is determined independently.
+If the target has 1 point of shield on the face that is being attacked and is hit by 2 missiles
+the first missile will detonate against the shield doing 1 point of damage (instead of 3)
+and the second missile will detonate against the armor (if the armor remaining on the face is less than 3 it will do at max the armor amount of damage)
+
+This damage bleed rule also applies to rockets.  However rockets are an all or nothing hit like other weapons (they are unguided).
+
+### Torpedo Special Rules:
+Torpedoes are short range propelled explosives with a special shield disrupter on the front allowing them to bypass shield defense.
+As a result when torpedoes hit, they ignore shields completely and deal damage directly to either armor or hull if no armor remaining.
+Torpedo damage does bleed through to the hull from the armor.
+
+If a Torpedo damages the hull of a ship, it always causes critical damage.
+
+### EMP Beam Special Rules:
+EMP beams are meant to disrupt enemy electronics and energy generation.
+They do triple damage vs shields and apply 1 EMP debuff when hitting armor or hull.
+
 
 ### Weapon Range:
 Weapons all share the same range brackets
