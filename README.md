@@ -33,12 +33,13 @@ It represents spaceship combat in a fictional universe.
 Its core mechanics are:
 - ship movement
 - ship facing
-- weapon facing
+- hard point fields of fire
 - energy management 
 - managing damage across the different sides of the ships
 - managing damage across shields, armor, and hull
 - multi battle campaigns with a persistent fleet
 - managing fleet in between battles
+- captains with different levels of experience and skills
 
 
 ## Units
@@ -48,16 +49,16 @@ Each play piece is a unit.
 The basic unit of Hex Ships is a capital ship.
 
 Most units will have the following attributes:
-1. Hull Structure (Current/Max): how much damage the unit can take before being destroyed
-2. Base Initiative: starting initiative value for this unit before captain bonus
+1. Hull Structure (Current/Max): how much internal damage the unit can take before being destroyed
+2. Base Initiative: starting initiative value for this unit before bonuses
 3. Armor Faces (Current/Max): armor plating in front, right, left, and rear of the unit that absorbs damage before it affects the Hull Structure
 4. Shield Faces (Current/Max): energy shielding that absorbs damage in front, right, left, and rear of the unit before it affects the Armor Plating, shields can be recharged
-5. Shield generator: The maximum number of shield points that can be regained in a single round
+5. Shield generator: The maximum number of shield points this unit can regain in a single round
 6. Size: effective size of the ship (for tie breakers and certain mission limitations)
 7. Silhouette: How big the ship appears to enemies from the four faces. Only 2 values here, front to back, and side to side
 8. Max Speed: the maximum number of spaces this ship could move in a single movement phase
-9. Current Speed: the number of spaces this unit must move this loop,  negative speed indicates moving in reverse
-10. Thrust Rating: positive and negative values indicate how much this unit can increase or decrease its speed in a single movement phase. 
+9. Current Speed: the number of spaces this unit must move this movement phase,  negative speed indicates moving in reverse
+10. Thrust Rating: positive and negative values indicate how much this unit can increase or decrease its speed at the beginning of the movement phase. 
 11. Maneuverability: how many hex face rotations a unit can make in a single movement phase 
 12. Current Energy:  How much energy the unit currently has available for firing weapons, charging shields, and special abilities
 13. Max Energy: The maximum number of energy this unit can have at once
@@ -69,6 +70,7 @@ Most units will have the following attributes:
 Units must move a number of spaces equal to their current speed during the movement phase.
 If their speed is positive, they will move forward.
 If their speed is negative, they will move backward.
+If their speed is zero, they will not move any direction (but can still rotate in place).
 The speed can be adjusted at the beginning of the movement phase equal to the units Thrust rating.
 
 A Unit may rotate during any part of its move.
@@ -78,7 +80,7 @@ For example: A ship at speed 3 with maneuverability 2 could rotate a total of 2 
 See example images folder for a sketch of possible end locations and facings from a move.
 
 Example of how to control movement:
-Button for "Advance"  2 buttons for rotation (right and left).  Speed / Thrust control.
+Button for "Advance"  2 buttons for rotation (right and left).
 
 ### Silhouette:
 When an attack is made against a ship, it takes into account the silhouette the ship presents to it as how difficult it is to hit.
@@ -88,17 +90,22 @@ Mini:  +5 to hit difficulty (represents fighters, bombers, other very small craf
 Tiny:  +2 to hit difficulty
 Small: +1 to hit difficulty
 Medium: 0 change to hit difficulty
-Large: - 1 to hit difficulty
+Large: -1 to hit difficulty
+Huge: -2 to hit difficulty
 
 Some units are smaller from the front and larger from the sides.
 Other units are larger from the front and smaller from the sides.
-Finally there are some units that have the same silhouette from any direction.
+There are some units that have the same silhouette from any direction.
 
 ### Shields
+Energy shields represent the first line of defense for most units.
+
+Shields can be recharged. The normal cost is 2 energy per 1 shield point.
+Shield charge action may not be performed more times than the units Shield generator value in a single turn.
+A shield face may not be increased higher than its max value.
+
 The shield charge action is performed during the movement and action phase
-Shields cost 2 energy to restore 1 shield point
-A shield may not be increased higher than its max value
-Shield charge action may not be performed more times than the units Shield generator value in a single turn
+
 If a Shield face is at 0,  it is considered collapsed.
 A collapsed shield may be restored but it takes 5 energy to rebuild the first point of the shield.
 After that it charges as normal.
@@ -116,10 +123,10 @@ Otherwise it will be skipped and the next weapon will be attempted
 Players can manually disable weapons to avoid using the energy
 Players can manually enable weapons if enough energy is available
 
-Units replenish their energy based on their Energy Generation value at the start of each turn
+Units replenish their energy based on their Energy Regen value at the start of each turn
 Units may not have more energy than their Max Energy value
 
-Some special abilities cost energy such as Afterburners
+Some special/captain abilities cost energy to use
 
 ### Weapon Hardpoints
 Ships weapons are located in hard points
@@ -176,7 +183,7 @@ Max level for a captain is 10
 - Level 3: 1 X Reroll per Battle
 - Level 4: + 1 Initiative
 - Level 5: Second Reroll per Battle
-- Level 6: + 1 Initiative to entire fleet when included in deployment
+- Level 6: + 1 Initiative to entire fleet when included in deployment (this bonus does not stack, only applies 1 x even if 2 level 6 captains in the fleet)
 
 ### Gunnery Levels
 - Level 2: - 1 to hit difficulty on all attacks
@@ -187,9 +194,9 @@ Max level for a captain is 10
 
 ### Engineering Levels
 - Level 2: + 1 energy recharge per turn
-- Level 3: Can use the Afterburners ability 1 x per battle (increase speed by engine rating +1, can exceed max speed by 1 for a turn)
+- Level 3: Can use the Afterburners ability 1 x per battle (+1 to positive thrust rating, can exceed max speed by 1 for a turn)
 - Level 4: + 1 energy recharge per turn
-- Level 5: Can use the Shield Shift ability 1 x per battle (move shield points from one shield face to another)
+- Level 5: Can use the Shield Shift ability (move shield points from one shield face to another, 3 turn cooldown)
 - Level 6: + 1 energy recharge per turn
 
 
@@ -207,9 +214,10 @@ In Between battles a player can:
 
 ## Weapons and Attacks
 
-There are 7 types of capital ship weapons
+There are 8 types of capital ship weapons
 
 - Lasers: Basic energy beams that maintain high accuracy but the damage drops off over range
+- Light Lasers: lower energy requirement than standard lasers but very short range
 - Heavy Lases: higher energy requirement than standard lasers but lower damage drop off over range
 - EMP Beams: Energy disrupting beams, high damage to shields, low to armor and hull but with an energy generation disruption affect. Range slightly limited.
 - Ballistic Cannons: High velocity projectile launchers.  Accuracy drops over range but damage stays consistent.  Uses Ammo.
@@ -218,14 +226,11 @@ There are 7 types of capital ship weapons
 - Torpedoes: Special explosive with a unique shield penetration ability.  Very difficult to hit with but high damage.  Ignores shields.  High risk, high reward weapon.  fixed firing angles
 
 
-Weapon damage is balanced so that the expected damage of any one weapon over a 12 round battle is very near to each other.
-Exceptions are torpedoes and heavy lasers which should have somewhat higher than expected damage due to low ammo for torpedoes and higher energy cost for heavy lasers
-EMP Beams are a special control weapon that is not balanced for damage.
-
 Total expected damage is:
  (damage * accuracy * number of attacks)
 
- Balance is based on energy weapons firing about 8 out of 10 turns and ammo based weapons firing all of their ammo.
+Weapons are balanced based on energy weapons firing about 8 out of 10 turns and ammo based weapons firing all of their ammo.
+Weapons are not perfectly balanced and that is intentional.
 
 ### Missile Special Rules:
 Missiles are guided weapons.
@@ -250,7 +255,8 @@ If the target has 1 point of shield on the face that is being attacked and is hi
 the first missile will detonate against the shield doing 1 point of damage (instead of 3)
 and the second missile will detonate against the armor (if the armor remaining on the face is less than 3 it will do at max the armor amount of damage)
 
-This damage bleed rule also applies to rockets.  However rockets are an all or nothing hit like other weapons (they are unguided).
+This damage bleed rule also applies to rockets.
+Rockets also roll for cluster hits but must make their to-hit roll first.
 
 ### Torpedo Special Rules:
 Torpedoes are short range propelled explosives with a special shield disrupter on the front allowing them to bypass shield defense.
@@ -261,7 +267,7 @@ If a Torpedo damages the hull of a ship, it always causes critical damage.
 
 ### EMP Beam Special Rules:
 EMP beams are meant to disrupt enemy electronics and energy generation.
-They do triple damage vs shields and apply 1 EMP debuff when hitting armor or hull.
+They do triple damage vs shields and apply 1 EMP debuff (Energy disruption) when hitting armor or hull.
 
 
 ### Weapon Range:
@@ -297,7 +303,7 @@ Anti Missile Systems that remove missile hits
 ### Damage Order
 
 Damage from weapons should be applied in the following order
-1. Laser weapons
+1. Laser weapons (Light, Stardard, and Heavy)
 2. EMP Beam weapons
 3. ballistic weapons
 4. missile weapons (missiles and rockets)
@@ -325,11 +331,11 @@ If a critical is rolled,  a follow up roll of 1 d6 determines what damage was do
 
 For the front of the ship:
 1.  no damage
-2. Forward Weapons:  one of the weapons that can fire with the forward arc is disabled
+2. Forward Weapons: one of the weapons that can fire with the forward arc is disabled
 3. Forward Weapons: "
-4. Forward thrusters: ship cannot reduce speed
+4. Forward thrusters: ship negative thrust is reduced by 1 to a min of 0
 5. Sensors: +2 difficulty of all this ships attacks
-6. Bridge:  Captain skills are reduced to 1 for all skills to a minimum of 1
+6. Bridge: Captain skills are reduced to 1 for all skills
 
 For the side of the ship:
 1. no damage
@@ -344,8 +350,8 @@ For the rear of the ship
 1. no damage
 2. rear weapon
 3. rear weapon
-4. Engines: max speed reduced by 1
-5. Engines: max speed reduced by 1
+4. Engines: max speed reduced by 1, forward thrust reduced by 1 (to a min of 0)
+5. Engines: max speed reduced by 1, forward thrust reduced by 1 (to a min of 0)
 6. Shield generator: all shields immediately drop and cannot be regenerated
 
 ### Sample Weapon Table
@@ -354,7 +360,8 @@ They should be easy to configure and modify for future builds.
 
 | Weapon | Energy Cost | Ammo Count | Short Range Damage | Short Range Accuracy | Medium Range Damage | Medium Range Accuracy |Long Range Damage | Long Range Accuracy |
 | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
-| Laser       | 3           | -           | 5           | 3+          | 4           | 3+          | 3           | 3+          |
+| Laser       | 3           | -           | 5           | 3+          | 3           | 3+          | 1           | 3+          |
+| Light Laser | 2           | -           | 3           | 3+          | -           | -           | -           | -           |
 | EMP Beam    | 3           | -           | 3           | 3+          | 2           | 4+          | -           | -           |
 | Heavy Laser | 5           | -           | 7           | 4+          | 6           | 4+          | 5           | 4+          |
 | Cannon      | 2           | 8           | 8           | 3+          | 8           | 5+          | 8           | 7+          |
